@@ -23,7 +23,7 @@ struct ContentView: View {
                 } else {
                     VStack {
                         searchBarView()
-                        NoteListView()
+                        NoteListView(noteItems: $noteItems)
                     }
                 }
                 newBtnView()
@@ -31,7 +31,7 @@ struct ContentView: View {
             .navigationTitle("笔记App")
             .navigationBarTitleDisplayMode(.inline)
         }.sheet(isPresented: $showNewNoteView, content: {
-            NewNoteView(showNewNoteView: $showNewNoteView)
+            NewNoteView(showNewNoteView: $showNewNoteView, noteItems: $noteItems)
         })
     }
     
@@ -95,6 +95,51 @@ struct ContentView: View {
                 }
             )
             .padding(.horizontal, 10)
+    }
+}
+
+struct NoteListView: View {
+    @Binding var noteItems: [NoteItem]
+    var body: some View {
+        List {
+            ForEach(noteItems) { noteItem in
+                NoteListRow(noteItem: noteItem)
+            }
+        }
+        .listStyle(InsetListStyle())
+    }
+}
+
+
+struct NoteListRow: View {
+    
+    @ObservedObject var noteItem: NoteItem
+    
+    var body: some View {
+        HStack {
+            VStack(alignment: .leading, spacing: 10) {
+                Text(noteItem.writeTime)
+                    .font(.system(size: 14))
+                    .foregroundStyle(.gray)
+                Text(noteItem.title)
+                    .font(.system(size: 17))
+                    .foregroundStyle(.black)
+                Text(noteItem.content)
+                    .font(.system(size: 14))
+                    .foregroundStyle(.gray)
+                    .lineLimit(1)
+                    .multilineTextAlignment(.leading)
+            }
+            Spacer()
+            
+            Button(action: {
+                
+            }, label: {
+                Image(systemName: "ellipsis")
+                    .foregroundStyle(.gray)
+                    .font(.system(size: 23))
+            })
+        }
     }
 }
 

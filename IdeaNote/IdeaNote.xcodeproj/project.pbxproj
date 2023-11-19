@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		7939D14F2B039CD5008CF8D1 /* NoteItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7939D14E2B039CD5008CF8D1 /* NoteItem.swift */; };
-		7939D1512B039D50008CF8D1 /* NoteListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7939D1502B039D50008CF8D1 /* NoteListView.swift */; };
 		793D9D622B04E6E000101C49 /* NewNoteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 793D9D612B04E6E000101C49 /* NewNoteView.swift */; };
 		794363432B0399A50006985A /* IdeaNoteApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794363422B0399A50006985A /* IdeaNoteApp.swift */; };
 		794363452B0399A50006985A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794363442B0399A50006985A /* ContentView.swift */; };
@@ -17,6 +16,7 @@
 		794363542B0399A70006985A /* IdeaNoteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794363532B0399A70006985A /* IdeaNoteTests.swift */; };
 		7943635E2B0399A70006985A /* IdeaNoteUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7943635D2B0399A70006985A /* IdeaNoteUITests.swift */; };
 		794363602B0399A70006985A /* IdeaNoteUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7943635F2B0399A70006985A /* IdeaNoteUITestsLaunchTests.swift */; };
+		79E599322B09DD4400E226A4 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E599312B09DD4400E226A4 /* ToastView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,7 +38,6 @@
 
 /* Begin PBXFileReference section */
 		7939D14E2B039CD5008CF8D1 /* NoteItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteItem.swift; sourceTree = "<group>"; };
-		7939D1502B039D50008CF8D1 /* NoteListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteListView.swift; sourceTree = "<group>"; };
 		793D9D612B04E6E000101C49 /* NewNoteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewNoteView.swift; sourceTree = "<group>"; };
 		7943633F2B0399A50006985A /* IdeaNote.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IdeaNote.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		794363422B0399A50006985A /* IdeaNoteApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdeaNoteApp.swift; sourceTree = "<group>"; };
@@ -50,6 +49,7 @@
 		794363592B0399A70006985A /* IdeaNoteUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IdeaNoteUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7943635D2B0399A70006985A /* IdeaNoteUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdeaNoteUITests.swift; sourceTree = "<group>"; };
 		7943635F2B0399A70006985A /* IdeaNoteUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdeaNoteUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		79E599312B09DD4400E226A4 /* ToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,8 +103,8 @@
 				794363422B0399A50006985A /* IdeaNoteApp.swift */,
 				794363442B0399A50006985A /* ContentView.swift */,
 				7939D14E2B039CD5008CF8D1 /* NoteItem.swift */,
-				7939D1502B039D50008CF8D1 /* NoteListView.swift */,
 				793D9D612B04E6E000101C49 /* NewNoteView.swift */,
+				79E599312B09DD4400E226A4 /* ToastView.swift */,
 				794363462B0399A60006985A /* Assets.xcassets */,
 				794363482B0399A60006985A /* Preview Content */,
 			);
@@ -268,9 +268,9 @@
 			files = (
 				7939D14F2B039CD5008CF8D1 /* NoteItem.swift in Sources */,
 				794363452B0399A50006985A /* ContentView.swift in Sources */,
-				7939D1512B039D50008CF8D1 /* NoteListView.swift in Sources */,
 				793D9D622B04E6E000101C49 /* NewNoteView.swift in Sources */,
 				794363432B0399A50006985A /* IdeaNoteApp.swift in Sources */,
+				79E599322B09DD4400E226A4 /* ToastView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

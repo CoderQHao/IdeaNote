@@ -14,6 +14,10 @@ struct NewNoteView: View {
     @State var title: String = ""
     
     @Binding var showNewNoteView: Bool
+    @Binding var noteItems: [NoteItem]
+    
+    @State var showToast = false
+    @State var showToastMessage: String = ""
     
     var body: some View {
         NavigationView {
@@ -33,8 +37,15 @@ struct NewNoteView: View {
                     saveBtnView()
                 }
             })
+            .toast(present: $showToast, message: $showToastMessage, alignment: .center)
         }
     }
+
+    private func addNote(writeTime:String,title:String,content:String) {
+        let note = NoteItem(writeTime: writeTime, title:title,content:content)
+        noteItems.append(note)
+    }
+
     
     private func closeBtnView() -> some View {
         Button(action: {
@@ -48,12 +59,28 @@ struct NewNoteView: View {
     
     private func saveBtnView() -> some View {
         Button(action: {
-            self.showNewNoteView = false
+            if title.isEmpty {
+                self.showToastMessage = "请输入标题"
+                self.showToast = true
+            } else if content.isEmpty {
+                self.showToastMessage = "请输入内容"
+                self.showToast = true
+            } else {
+                self.addNote(writeTime: getCurrentTime(), title: title, content: content)
+                self.showNewNoteView = false
+            }
         }) {
             Text("完成")
                 .font(.system(size: 17))
         }
     }
+    
+    private func getCurrentTime() -> String {
+        let dateformatter = DateFormatter()
+        dateformatter.dateFormat = "YYYY.MM.dd"
+        return dateformatter.string(from: Date())
+    }
+
     
     private func titleView() -> some View {
         TextField("请输入标题", text: $title, onEditingChanged: { editingChanged in
@@ -78,5 +105,5 @@ struct NewNoteView: View {
 }
 
 #Preview {
-    NewNoteView(showNewNoteView: .constant(true))
+    NewNoteView(showNewNoteView: .constant(true), noteItems: .constant([]))
 }
