@@ -9,30 +9,27 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @State var searchText = ""
-    
-    @State var showNewNoteView = false
-    
-    @State var noteItems: [NoteItem] = [NoteItem(writeTime: "2022.09.17", title: "第一条笔记", content: "快来使用念头笔记记录生活吧～快来使用念头笔记记录生活吧～")]
+    @EnvironmentObject var viewModel: NoteViewModel
     
     var body: some View {
         NavigationView {
             ZStack {
-                if noteItems.isEmpty {
+                if !viewModel.isSearching && viewModel.noteModels.isEmpty {
                     noDataView()
                 } else {
                     VStack {
                         searchBarView()
-                        NoteListView(noteItems: $noteItems)
+                        noteListView()
                     }
                 }
                 newBtnView()
             }
             .navigationTitle("笔记App")
             .navigationBarTitleDisplayMode(.inline)
-        }.sheet(isPresented: $showNewNoteView, content: {
-            NewNoteView(showNewNoteView: $showNewNoteView, noteItems: $noteItems)
-        })
+        }
+        .sheet(isPresented: $viewModel.showNewNoteView) {
+            NewNoteView(noteModel: NoteModel(writeTime: "", title: "", content: ""))
+        }
     }
     
     /// 缺省图
@@ -56,7 +53,11 @@ struct ContentView: View {
             HStack {
                 Spacer()
                 Button(action: {
-                    self.showNewNoteView = true
+                    self.viewModel.isAdd = true
+                    self.viewModel.writeTime = ""
+                    self.viewModel.title = ""
+                    self.viewModel.content = ""
+                    self.viewModel.showNewNoteView = true
                 }, label: {
                     Image(systemName: "plus.circle.fill")
                         .font(.system(size: 48))
@@ -70,7 +71,7 @@ struct ContentView: View {
     
     /// 搜索
     private func searchBarView() -> some View {
-        TextField("搜索内容", text: $searchText)
+        TextField("搜索内容", text: $viewModel.searchText)
             .padding(7)
             .padding(.horizontal, 25)
             .background(Color(.systemGray6))
@@ -83,9 +84,10 @@ struct ContentView: View {
                         .padding(.leading, 8)
                     
                     // 编辑时显示清除按钮
-                    if searchText != "" {
+                    if viewModel.searchText != "" {
                         Button(action: {
-                            self.searchText = ""
+                            self.viewModel.searchText = ""
+                            self.viewModel.loadItems()
                         }) {
                             Image(systemName: "multiply.circle.fill")
                                 .foregroundColor(.gray)
@@ -95,54 +97,89 @@ struct ContentView: View {
                 }
             )
             .padding(.horizontal, 10)
+            .onChange(of: viewModel.searchText) { _ in
+                if viewModel.searchText != "" {
+                    self.viewModel.isSearching = true
+                    self.viewModel.searchContet()
+                } else {
+                    viewModel.searchText = ""
+                    self.viewModel.isSearching = false
+                    self.viewModel.loadItems()
+                }
+            }
     }
-}
-
-struct NoteListView: View {
-    @Binding var noteItems: [NoteItem]
-    var body: some View {
+    
+    func noteListView() -> some View {
         List {
-            ForEach(noteItems) { noteItem in
-                NoteListRow(noteItem: noteItem)
+            ForEach(viewModel.noteModels) { noteModel in
+                NoteListRow(noteId: noteModel.id)
             }
         }
         .listStyle(InsetListStyle())
     }
 }
 
-
 struct NoteListRow: View {
     
-    @ObservedObject var noteItem: NoteItem
+    @EnvironmentObject var viewModel: NoteViewModel
+    
+    var noteId: UUID
+    
+    var noteModel: NoteModel? {
+        return viewModel.getItemById(noteId: noteId)
+    }
     
     var body: some View {
         HStack {
-            VStack(alignment: .leading, spacing: 10) {
-                Text(noteItem.writeTime)
-                    .font(.system(size: 14))
-                    .foregroundStyle(.gray)
-                Text(noteItem.title)
-                    .font(.system(size: 17))
-                    .foregroundStyle(.black)
-                Text(noteItem.content)
-                    .font(.system(size: 14))
-                    .foregroundStyle(.gray)
-                    .lineLimit(1)
-                    .multilineTextAlignment(.leading)
-            }
-            Spacer()
-            
-            Button(action: {
+            HStack {
+                VStack(alignment: .leading, spacing: 10) {
+                    Text(noteModel?.writeTime ?? "")
+                        .font(.system(size: 14))
+                        .foregroundStyle(.gray)
+                    Text(noteModel?.title ?? "")
+                        .font(.system(size: 17))
+                        .foregroundStyle(.black)
+                    Text(noteModel?.content ?? "")
+                        .font(.system(size: 14))
+                        .foregroundStyle(.gray)
+                        .lineLimit(1)
+                        .multilineTextAlignment(.leading)
+                }
+                .onTapGesture {
+                    self.viewModel.isAdd = false
+                    self.viewModel.showEditNoteView = true
+                    self.viewModel.selectedNote = noteModel ?? NoteModel(writeTime: "", title: "", content: "")
+                }
+                Spacer()
                 
-            }, label: {
-                Image(systemName: "ellipsis")
-                    .foregroundStyle(.gray)
-                    .font(.system(size: 23))
-            })
+                Button(action: {
+                    viewModel.showActionSheet = true
+                }, label: {
+                    Image(systemName: "ellipsis")
+                        .foregroundStyle(.gray)
+                        .font(.system(size: 23))
+                })
+            }
+        }
+        // 编辑笔记
+        .sheet(isPresented: $viewModel.showEditNoteView, content: {
+            NewNoteView(noteModel: viewModel.selectedNote ?? NoteModel(writeTime: "", title: "", content: ""))
+        })
+        // 删除笔记
+        .actionSheet(isPresented: self.$viewModel.showActionSheet) {
+            ActionSheet(
+                title: Text("你确定要删除此项吗？"),
+                message: nil,
+                buttons: [
+                    .destructive(Text("删除"), action: {
+                        self.viewModel.deleteItem(noteId: noteId)
+                    }),
+                    .cancel(Text("取消")),
+                ])
         }
     }
 }
 
 #Preview {
-    ContentView()
+    ContentView().environmentObject(NoteViewModel())
 }

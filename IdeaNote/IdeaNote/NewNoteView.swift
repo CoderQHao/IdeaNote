@@ -9,15 +9,13 @@ import SwiftUI
 
 struct NewNoteView: View {
     
-    @State var content: String = ""
-    @State var isEditing = false
-    @State var title: String = ""
-    
-    @Binding var showNewNoteView: Bool
-    @Binding var noteItems: [NoteItem]
-    
-    @State var showToast = false
-    @State var showToastMessage: String = ""
+    @EnvironmentObject var viewModel: NoteViewModel
+
+    // 声明参数
+    @State var noteModel: NoteModel
+
+    // 关闭弹窗
+    @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
         NavigationView {
@@ -27,7 +25,7 @@ struct NewNoteView: View {
                 Divider()
                 contentView()
             }
-            .navigationTitle("新建笔记")
+            .navigationTitle(viewModel.isAdd ? "新建笔记" : "编辑笔记")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar(content: {
                 ToolbarItem(placement: .topBarLeading) {
@@ -37,64 +35,86 @@ struct NewNoteView: View {
                     saveBtnView()
                 }
             })
-            .toast(present: $showToast, message: $showToastMessage, alignment: .center)
+            .toast(present: $viewModel.showToast, message: $viewModel.showToastMessage)
         }
     }
-
-    private func addNote(writeTime:String,title:String,content:String) {
-        let note = NoteItem(writeTime: writeTime, title:title,content:content)
-        noteItems.append(note)
-    }
-
     
     private func closeBtnView() -> some View {
         Button(action: {
-            self.showNewNoteView = false
+            self.presentationMode.wrappedValue.dismiss()
         }) {
             Image(systemName: "xmark.circle.fill")
                 .font(.system(size: 17))
                 .foregroundColor(.gray)
         }
     }
-    
-    private func saveBtnView() -> some View {
+
+    func saveBtnView() -> some View {
         Button(action: {
-            if title.isEmpty {
-                self.showToastMessage = "请输入标题"
-                self.showToast = true
-            } else if content.isEmpty {
-                self.showToastMessage = "请输入内容"
-                self.showToast = true
+            //判断当前是新增还是编辑
+            if viewModel.isAdd {
+                //判断标题是否为空
+                if viewModel.title.isEmpty {
+                    viewModel.showToast = true
+                    viewModel.showToastMessage = "请输入标题"
+                }
+                
+                //判断内容是否为空
+                else if viewModel.content.isEmpty {
+                    viewModel.showToast = true
+                    viewModel.showToastMessage = "请输入内容"
+                }
+                
+                //校验通过
+                else {
+                    // 新增一条笔记
+                    self.viewModel.addItem(writeTime: viewModel.getCurrentTime(), title: viewModel.title, content: viewModel.content)
+                    //关闭弹窗
+                    self.presentationMode.wrappedValue.dismiss()
+                }
+
             } else {
-                self.addNote(writeTime: getCurrentTime(), title: title, content: content)
-                self.showNewNoteView = false
+                
+                //判断标题是否为空
+                if viewModel.title.isEmpty {
+                    viewModel.showToast = true
+                    viewModel.showToastMessage = "标题不能为空"
+                }
+                
+                //判断内容是否为空
+                else if viewModel.content.isEmpty {
+                    viewModel.showToast = true
+                    viewModel.showToastMessage = "内容不能为空"
+                }
+                
+                //校验通过
+                else {
+                    // 保存一条新笔记
+                    self.viewModel.editItem(item: noteModel)
+                    
+                    //关闭弹窗
+                    self.presentationMode.wrappedValue.dismiss()
+                }
             }
+
         }) {
             Text("完成")
                 .font(.system(size: 17))
         }
     }
-    
-    private func getCurrentTime() -> String {
-        let dateformatter = DateFormatter()
-        dateformatter.dateFormat = "YYYY.MM.dd"
-        return dateformatter.string(from: Date())
-    }
 
     
     private func titleView() -> some View {
-        TextField("请输入标题", text: $title, onEditingChanged: { editingChanged in
-            self.isEditing = editingChanged
-        })
-        .padding()
+        TextField("请输入标题", text: viewModel.isAdd ? $viewModel.title : $noteModel.title)
+            .padding()
     }
     
     private func contentView() -> some View {
         ZStack(alignment: .topLeading) {
-            TextEditor(text: $content)
+            TextEditor(text: viewModel.isAdd ? $viewModel.content : $noteModel.content)
                 .font(.system(size: 17))
                 .padding()
-            if content.isEmpty {
+            if viewModel.isAdd ? (viewModel.content.isEmpty) : (noteModel.content.isEmpty) {
                 Text("请输入内容")
                     .foregroundColor(Color(UIColor.placeholderText))
                     .padding(.top, 23)
@@ -105,5 +125,5 @@ struct NewNoteView: View {
 }
 
 #Preview {
-    NewNoteView(showNewNoteView: .constant(true), noteItems: .constant([]))
+    NewNoteView(noteModel: NoteModel(writeTime: "", title: "", content: "")).environmentObject(NoteViewModel())
 }

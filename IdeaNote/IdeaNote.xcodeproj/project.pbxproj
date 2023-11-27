@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7939D14F2B039CD5008CF8D1 /* NoteItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7939D14E2B039CD5008CF8D1 /* NoteItem.swift */; };
+		7939D14F2B039CD5008CF8D1 /* NoteModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7939D14E2B039CD5008CF8D1 /* NoteModel.swift */; };
 		793D9D622B04E6E000101C49 /* NewNoteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 793D9D612B04E6E000101C49 /* NewNoteView.swift */; };
 		794363432B0399A50006985A /* IdeaNoteApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794363422B0399A50006985A /* IdeaNoteApp.swift */; };
 		794363452B0399A50006985A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794363442B0399A50006985A /* ContentView.swift */; };
@@ -17,6 +17,7 @@
 		7943635E2B0399A70006985A /* IdeaNoteUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7943635D2B0399A70006985A /* IdeaNoteUITests.swift */; };
 		794363602B0399A70006985A /* IdeaNoteUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7943635F2B0399A70006985A /* IdeaNoteUITestsLaunchTests.swift */; };
 		79E599322B09DD4400E226A4 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E599312B09DD4400E226A4 /* ToastView.swift */; };
+		79E599342B09EFC800E226A4 /* NoteViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E599332B09EFC800E226A4 /* NoteViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,7 +38,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		7939D14E2B039CD5008CF8D1 /* NoteItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteItem.swift; sourceTree = "<group>"; };
+		7939D14E2B039CD5008CF8D1 /* NoteModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteModel.swift; sourceTree = "<group>"; };
 		793D9D612B04E6E000101C49 /* NewNoteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewNoteView.swift; sourceTree = "<group>"; };
 		7943633F2B0399A50006985A /* IdeaNote.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IdeaNote.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		794363422B0399A50006985A /* IdeaNoteApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdeaNoteApp.swift; sourceTree = "<group>"; };
@@ -50,6 +51,7 @@
 		7943635D2B0399A70006985A /* IdeaNoteUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdeaNoteUITests.swift; sourceTree = "<group>"; };
 		7943635F2B0399A70006985A /* IdeaNoteUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdeaNoteUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		79E599312B09DD4400E226A4 /* ToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
+		79E599332B09EFC800E226A4 /* NoteViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,7 +104,8 @@
 			children = (
 				794363422B0399A50006985A /* IdeaNoteApp.swift */,
 				794363442B0399A50006985A /* ContentView.swift */,
-				7939D14E2B039CD5008CF8D1 /* NoteItem.swift */,
+				7939D14E2B039CD5008CF8D1 /* NoteModel.swift */,
+				79E599332B09EFC800E226A4 /* NoteViewModel.swift */,
 				793D9D612B04E6E000101C49 /* NewNoteView.swift */,
 				79E599312B09DD4400E226A4 /* ToastView.swift */,
 				794363462B0399A60006985A /* Assets.xcassets */,
@@ -266,8 +269,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7939D14F2B039CD5008CF8D1 /* NoteItem.swift in Sources */,
+				7939D14F2B039CD5008CF8D1 /* NoteModel.swift in Sources */,
 				794363452B0399A50006985A /* ContentView.swift in Sources */,
+				79E599342B09EFC800E226A4 /* NoteViewModel.swift in Sources */,
 				793D9D622B04E6E000101C49 /* NewNoteView.swift in Sources */,
 				794363432B0399A50006985A /* IdeaNoteApp.swift in Sources */,
 				79E599322B09DD4400E226A4 /* ToastView.swift in Sources */,
@@ -441,6 +445,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -469,6 +474,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
