@@ -20,25 +20,17 @@ class NoteViewModel: ObservableObject {
     @Published var searchText = ""
 
     // 是否正在搜索
-    @Published var isSearching:Bool = false
+    @Published var isSearching: Bool = false
     
     // 是否是新增
-    @Published var isAdd:Bool = true
+    @Published var isAdd: Bool = true
     
     // 打开新建笔记弹窗
-    @Published var showNewNoteView:Bool = false
-    
-    // 打开编辑笔记弹窗
-    @Published var showEditNoteView:Bool = false
-    
-    // 打开删除确认弹窗
-    @Published var showActionSheet:Bool = false
+    @Published var showNewNoteView: Bool = false
     
     // 提示信息
     @Published var showToast = false
     @Published var showToastMessage: String = "提示信息"
-    
-    @Published var selectedNote: NoteModel?
     
     init() {
         loadItems()
@@ -57,8 +49,8 @@ class NoteViewModel: ObservableObject {
     }
 
     // 删除笔记
-    func deleteItem(noteId: UUID) {
-        noteModels.removeAll(where: { $0.id == noteId })
+    func deleteItem(item: NoteModel) {
+        noteModels.removeAll(where: { $0.id == item.id })
         saveItems()
     }
 

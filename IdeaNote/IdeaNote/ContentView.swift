@@ -121,6 +121,10 @@ struct NoteListRow: View {
     
     @EnvironmentObject var viewModel: NoteViewModel
     
+    @State private var showingActionSheet = false
+    @State private var showEditNoteView = false
+    
+    
     var noteModel: NoteModel
     
     var body: some View {
@@ -141,13 +145,12 @@ struct NoteListRow: View {
                 }
                 .onTapGesture {
                     self.viewModel.isAdd = false
-                    self.viewModel.showEditNoteView = true
-                    self.viewModel.selectedNote = noteModel
+                    showEditNoteView.toggle()
                 }
                 Spacer()
                 
                 Button(action: {
-                    viewModel.showActionSheet = true
+                    showingActionSheet.toggle()
                 }, label: {
                     Image(systemName: "ellipsis")
                         .foregroundStyle(.gray)
@@ -156,17 +159,17 @@ struct NoteListRow: View {
             }
         }
         // 编辑笔记
-        .sheet(isPresented: $viewModel.showEditNoteView, content: {
-            NewNoteView(noteModel: viewModel.selectedNote ?? NoteModel(writeTime: "", title: "", content: ""))
+        .sheet(isPresented: $showEditNoteView, content: {
+            NewNoteView(noteModel: noteModel)
         })
         // 删除笔记
-        .actionSheet(isPresented: self.$viewModel.showActionSheet) {
-            ActionSheet(
+        .actionSheet(isPresented: $showingActionSheet) {
+            return ActionSheet(
                 title: Text("你确定要删除此项吗？"),
                 message: nil,
                 buttons: [
                     .destructive(Text("删除"), action: {
-                        self.viewModel.deleteItem(noteId: noteModel.id)
+                        self.viewModel.deleteItem(item: noteModel)
                     }),
                     .cancel(Text("取消")),
                 ])
