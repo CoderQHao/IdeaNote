@@ -10,40 +10,38 @@ import Foundation
 import SwiftUI
 
 class NoteViewModel: ObservableObject {
-    //数据模型
+
     @Published var noteModels = [NoteModel]()
     
-    //笔记参数
+    // 笔记参数
     @Published var writeTime: String = ""
     @Published var title: String = ""
     @Published var content: String = ""
     @Published var searchText = ""
 
-    //判断是否正在搜索
+    // 是否正在搜索
     @Published var isSearching:Bool = false
     
-    //判断是否是新增
+    // 是否是新增
     @Published var isAdd:Bool = true
     
-    //打开新建笔记弹窗
+    // 打开新建笔记弹窗
     @Published var showNewNoteView:Bool = false
     
-    //打开编辑笔记弹窗
+    // 打开编辑笔记弹窗
     @Published var showEditNoteView:Bool = false
     
-    //打开删除确认弹窗
+    // 打开删除确认弹窗
     @Published var showActionSheet:Bool = false
     
-    //提示信息
+    // 提示信息
     @Published var showToast = false
     @Published var showToastMessage: String = "提示信息"
     
     @Published var selectedNote: NoteModel?
     
-    //初始化
     init() {
         loadItems()
-        saveItems()
     }
     
     // 创建笔记
@@ -53,7 +51,7 @@ class NoteViewModel: ObservableObject {
         saveItems()
     }
     
-    // 获得数据项ID
+    // 获得数据
     func getItemById(noteId: UUID) -> NoteModel? {
         return noteModels.first(where: { $0.id == noteId }) ?? nil
     }
@@ -66,13 +64,13 @@ class NoteViewModel: ObservableObject {
 
     // 编辑笔记
     func editItem(item: NoteModel) {
-        if let id = noteModels.firstIndex(where: { $0.id == item.id }) {
-            noteModels[id] = item
+        if let index = noteModels.firstIndex(where: { $0.id == item.id }) {
+            noteModels[index] = item
             saveItems()
         }
     }
     
-    // 搜索笔记
+    // 通过标题搜索笔记
     func searchContet() {
         let query = searchText.lowercased()
         DispatchQueue.global(qos: .background).async {
@@ -88,15 +86,9 @@ class NoteViewModel: ObservableObject {
         dateformatter.dateFormat = "MM.dd HH:mm"
         return dateformatter.string(from: Date())
     }
-    
-    // 获取设备上的文档目录路径
-    func documentsDirectory() -> URL {
-        FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-    }
 
-    // 获取plist数据文件的路径
     func dataFilePath() -> URL {
-        documentsDirectory().appendingPathComponent("IdeaNote.plist")
+        FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("IdeaNote.plist")
     }
 
     // 将数据写入本地存储

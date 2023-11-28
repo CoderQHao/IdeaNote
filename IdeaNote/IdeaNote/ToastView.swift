@@ -31,8 +31,8 @@ struct ToastViewModifier: ViewModifier {
             .zIndex(1)
             .onChange(of: present) { value in
                 if value {
-                    // 延迟2秒消失
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                    // 延迟1秒消失
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                         present.toggle()
                     }
                 }

@@ -84,7 +84,7 @@ struct ContentView: View {
                         .padding(.leading, 8)
                     
                     // 编辑时显示清除按钮
-                    if viewModel.searchText != "" {
+                    if !viewModel.searchText.isEmpty {
                         Button(action: {
                             self.viewModel.searchText = ""
                             self.viewModel.loadItems()
@@ -98,7 +98,7 @@ struct ContentView: View {
             )
             .padding(.horizontal, 10)
             .onChange(of: viewModel.searchText) { _ in
-                if viewModel.searchText != "" {
+                if !viewModel.searchText.isEmpty {
                     self.viewModel.isSearching = true
                     self.viewModel.searchContet()
                 } else {
@@ -111,9 +111,7 @@ struct ContentView: View {
     
     func noteListView() -> some View {
         List {
-            ForEach(viewModel.noteModels) { noteModel in
-                NoteListRow(noteId: noteModel.id)
-            }
+            ForEach(viewModel.noteModels) { NoteListRow(noteModel: $0) }
         }
         .listStyle(InsetListStyle())
     }
@@ -123,23 +121,19 @@ struct NoteListRow: View {
     
     @EnvironmentObject var viewModel: NoteViewModel
     
-    var noteId: UUID
-    
-    var noteModel: NoteModel? {
-        return viewModel.getItemById(noteId: noteId)
-    }
+    var noteModel: NoteModel
     
     var body: some View {
         HStack {
             HStack {
                 VStack(alignment: .leading, spacing: 10) {
-                    Text(noteModel?.writeTime ?? "")
+                    Text(noteModel.writeTime)
                         .font(.system(size: 14))
                         .foregroundStyle(.gray)
-                    Text(noteModel?.title ?? "")
+                    Text(noteModel.title)
                         .font(.system(size: 17))
                         .foregroundStyle(.black)
-                    Text(noteModel?.content ?? "")
+                    Text(noteModel.content)
                         .font(.system(size: 14))
                         .foregroundStyle(.gray)
                         .lineLimit(1)
@@ -148,7 +142,7 @@ struct NoteListRow: View {
                 .onTapGesture {
                     self.viewModel.isAdd = false
                     self.viewModel.showEditNoteView = true
-                    self.viewModel.selectedNote = noteModel ?? NoteModel(writeTime: "", title: "", content: "")
+                    self.viewModel.selectedNote = noteModel
                 }
                 Spacer()
                 
@@ -172,7 +166,7 @@ struct NoteListRow: View {
                 message: nil,
                 buttons: [
                     .destructive(Text("删除"), action: {
-                        self.viewModel.deleteItem(noteId: noteId)
+                        self.viewModel.deleteItem(noteId: noteModel.id)
                     }),
                     .cancel(Text("取消")),
                 ])

@@ -11,7 +11,6 @@ struct NewNoteView: View {
     
     @EnvironmentObject var viewModel: NoteViewModel
 
-    // 声明参数
     @State var noteModel: NoteModel
 
     // 关闭弹窗
@@ -51,48 +50,30 @@ struct NewNoteView: View {
 
     func saveBtnView() -> some View {
         Button(action: {
-            //判断当前是新增还是编辑
-            if viewModel.isAdd {
-                //判断标题是否为空
+            if viewModel.isAdd { // 新增
                 if viewModel.title.isEmpty {
                     viewModel.showToast = true
                     viewModel.showToastMessage = "请输入标题"
-                }
-                
-                //判断内容是否为空
-                else if viewModel.content.isEmpty {
+                } else if viewModel.content.isEmpty {
                     viewModel.showToast = true
                     viewModel.showToastMessage = "请输入内容"
-                }
-                
-                //校验通过
-                else {
+                } else {
                     // 新增一条笔记
                     self.viewModel.addItem(writeTime: viewModel.getCurrentTime(), title: viewModel.title, content: viewModel.content)
-                    //关闭弹窗
+                    // 关闭弹窗
                     self.presentationMode.wrappedValue.dismiss()
                 }
-
-            } else {
-                
-                //判断标题是否为空
+            } else { // 编辑
                 if viewModel.title.isEmpty {
                     viewModel.showToast = true
                     viewModel.showToastMessage = "标题不能为空"
-                }
-                
-                //判断内容是否为空
-                else if viewModel.content.isEmpty {
+                } else if viewModel.content.isEmpty {
                     viewModel.showToast = true
                     viewModel.showToastMessage = "内容不能为空"
-                }
-                
-                //校验通过
-                else {
+                } else {
                     // 保存一条新笔记
                     self.viewModel.editItem(item: noteModel)
-                    
-                    //关闭弹窗
+                    // 关闭弹窗
                     self.presentationMode.wrappedValue.dismiss()
                 }
             }
