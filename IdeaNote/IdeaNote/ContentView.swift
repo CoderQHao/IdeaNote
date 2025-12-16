@@ -163,16 +163,37 @@ struct NoteListRow: View {
             NewNoteView(noteModel: noteModel)
         })
         // 删除笔记
-        .actionSheet(isPresented: $showingActionSheet) {
-            return ActionSheet(
-                title: Text("你确定要删除此项吗？"),
-                message: nil,
-                buttons: [
-                    .destructive(Text("删除"), action: {
-                        self.viewModel.deleteItem(item: noteModel)
-                    }),
-                    .cancel(Text("取消")),
-                ])
+        .sheet(isPresented: $showingActionSheet) {
+            VStack(spacing: 20) {
+                Text("你确定要删除此项吗？")
+                    .font(.system(size: 17))
+                    .bold()
+
+                Button(action: {
+                    self.viewModel.deleteItem(item: noteModel)
+                    showingActionSheet = false
+                }, label: {
+                    Text("删除")
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.yellow)
+                        .foregroundStyle(.black)
+                        .cornerRadius(12)
+                })
+
+                Button(action: {
+                    showingActionSheet = false
+                }, label: {
+                    Text("取消")
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color(.systemGray5))
+                        .foregroundStyle(.black)
+                        .cornerRadius(12)
+                })
+            }
+            .padding()
+            .presentationDetents([.height(200)])
         }
     }
 }
