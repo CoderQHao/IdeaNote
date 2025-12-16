@@ -168,7 +168,7 @@ struct NoteListRow: View {
                 title: Text("你确定要删除此项吗？"),
                 message: nil,
                 buttons: [
-                    .destructive(Text("删除"), action: {
+                    .default(Text("删除").foregroundColor(.yellow), action: {
                         self.viewModel.deleteItem(item: noteModel)
                     }),
                     .cancel(Text("取消")),
